@@ -1,4 +1,7 @@
 Revision history for Perl extension Tie::OneOff
 
+0.2  Wed Feb 19 12:15:06 2003
+	- fixed test suite problem on some platforms;
+
 0.1  Mon Oct 14 15:15:06 2002
 	- original version;

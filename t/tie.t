@@ -33,4 +33,4 @@ sub make_counter {
 my $c1 = make_counter(1);
 my $c2 = make_counter(2);
 $$c2 = 10;
-t("$$c1 $$c2 $$c2 $$c2 $$c1 $$c1" eq '1 12 14 16 2 3');
+t("X $$c1 $$c2 $$c2 $$c2 $$c1 $$c1" eq 'X 1 12 14 16 2 3');

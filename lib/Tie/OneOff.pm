@@ -1,7 +1,7 @@
 # $Id: OneOff.pm,v 1.13 2002/10/14 14:20:53 bam Exp $
 
 package Tie::OneOff;
-our $VERSION = 0.1;
+our $VERSION = 0.2;
 
 =head1 NAME
 
