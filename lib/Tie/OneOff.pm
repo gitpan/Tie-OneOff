@@ -1,5 +1,5 @@
 package Tie::OneOff;
-our $VERSION = 0.3;
+our $VERSION = 0.4;
 
 =head1 NAME
 
@@ -18,11 +18,10 @@ Tie::OneOff - create tied variables without defining a separate package
     sub make_counter {
 	my $step = shift;
 	my $i = 0;
-        tie my $counter, 'Tie::OneOff' => {
+        Tie::OneOff->scalar({
 	    BASE => \$i, # Implies: STORE => sub { $i = shift }
 	    FETCH => sub { $i += $step },
-        };
-	\$counter;
+        });
     }
 
     my $c1 = make_counter(1);
@@ -69,6 +68,11 @@ C<Tie::StdScalar::STORE(\$i,@_)> which in turn is equivalent to C<$i=shift>.
 Since many tied variables need only a C<FETCH> method C<Tie::OneOff>
 ties can also be specified by giving a simple code reference that is
 taken to be the variables C<FETCH> callback.
+
+For convience the class methods C<scalar>, C<hash> and C<array> take
+the same arguments as the tie inferface and return a reference to an
+anonymous tied variable.  The class method C<lvalue> is like C<scalar>
+but returns an lvalue rather than a reference.
 
 =head1 SEE ALSO
 
@@ -120,6 +124,30 @@ sub AUTOLOAD {
 	+Carp::croak "No $func handler defined in " . __PACKAGE__ . " object";
     }; 
     goto &$code;
+}
+
+sub scalar {
+    my $class = shift;
+    tie my ($v), $class, @_;
+    \$v;
+}
+
+sub lvalue : lvalue {
+    my $class = shift;
+    tie my($v), $class, @_;
+    $v;
+}
+
+sub hash {
+    my $class = shift;
+    tie my(%v), $class, @_;
+    \%v;
+}
+
+sub array {
+    my $class = shift;
+    tie my(@v), $class, @_;
+    \@v;
 }
 
 1;
