@@ -1,5 +1,5 @@
 package Tie::OneOff;
-our $VERSION = 0.4;
+our $VERSION = 1.01;
 
 =head1 NAME
 
@@ -28,7 +28,17 @@ Tie::OneOff - create tied variables without defining a separate package
     my $c2 = make_counter(2);
     $$c2 = 10;
     print "$$c1 $$c2 $$c2 $$c2 $$c1 $$c1\n"; # 1 12 14 16 2 3
- 
+
+    sub foo : lvalue {
+	+Tie::OneOff->lvalue({
+	    STORE => sub { print "foo()=$_[0]\n" },
+	    FETCH => sub { "wibble" },
+	});
+    }
+
+    foo='wobble';              # foo()=wobble
+    print "foo()=", foo, "\n"; # foo()=wibble
+
 =head1 DESCRIPTION
 
 The Perl tie mechanism ties a Perl variable to a Perl object.  This
@@ -62,12 +72,12 @@ being tied.
 In C<make_counter()> in the synopsis above, the variable C<$i> gets blessed
 into C<Tie::StdScalar>. Since there is no explict STORE in the dispatch
 table, an attempt to store into a counter is implemented by calling
-C<(\$i)->STORE(@_)> which in turn is resolved as
+C<(\$i)-E<gt>STORE(@_)> which in turn is resolved as
 C<Tie::StdScalar::STORE(\$i,@_)> which in turn is equivalent to C<$i=shift>.
 
 Since many tied variables need only a C<FETCH> method C<Tie::OneOff>
 ties can also be specified by giving a simple code reference that is
-taken to be the variables C<FETCH> callback.
+taken to be the variable's C<FETCH> callback.
 
 For convience the class methods C<scalar>, C<hash> and C<array> take
 the same arguments as the tie inferface and return a reference to an
