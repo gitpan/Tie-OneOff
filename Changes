@@ -1,5 +1,9 @@
 Revision history for Perl extension Tie::OneOff
 
+0.3  Wed Aug 20 17:41:29 2003
+        - added shorthand for FETCH-only variables
+        - thanks to Iain Truskett <spoon@cpan.org>
+
 0.2  Wed Feb 19 12:15:06 2003
 	- fixed test suite problem on some platforms;
 

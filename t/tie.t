@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-print "1..2\n";
+print "1..3\n";
 
 my $testno;
 
@@ -19,6 +19,13 @@ tie my %REV, 'Tie::OneOff' => {
 };
 
 t ($REV{olleH} eq 'Hello' );
+
+tie my %REV2, 'Tie::OneOff' => sub {
+    reverse shift;
+};
+
+t ($REV2{olleH} eq 'Hello' );
+
 
 sub make_counter {
     my $step = shift;
