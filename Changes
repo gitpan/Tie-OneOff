@@ -1,5 +1,8 @@
 Revision history for Perl extension Tie::OneOff
 
+1.03 Sat Feb 2 2008;
+	- Added pod.t to manifest - it was omitted in error in 1.02
+
 1.02 Wed Dec 12 2007;
 	- Fix assumption that Carp::croak is pre-loaded
 
