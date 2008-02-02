@@ -1,5 +1,5 @@
 package Tie::OneOff;
-our $VERSION = 1.01;
+our $VERSION = 1.02;
 
 =head1 NAME
 
@@ -84,9 +84,22 @@ the same arguments as the tie inferface and return a reference to an
 anonymous tied variable.  The class method C<lvalue> is like C<scalar>
 but returns an lvalue rather than a reference.
 
+=head1 Relationship to other modules
+
+This module's original working title was Tie::Simple however it was
+eventually released as Tie::OneOff.  Some time later another,
+substancially identical, module was developed independantly and
+released as L<Tie::Simple>.
+
+This module can be used as a trick to make functions that interpolate
+into strings but if that's all you want you may want to use
+L<Interpolation> instead.
+
+XXX Want XXX
+
 =head1 SEE ALSO
 
-L<perltie>, L<Tie::Scalar>, L<Tie::Hash>, L<Tie::Array>, L<Interpolation>.
+L<perltie>, L<Tie::Scalar>, L<Tie::Hash>, L<Tie::Array>, L<Interpolation>, L<Tie::Simple>.
 
 =cut
 
@@ -107,7 +120,7 @@ sub AUTOLOAD {
     unless ( ref $self ) {
 	unless ($func =~ /^TIE/) {
 	    require Carp;
-	    +Carp::croak "Non-TIE class method $func called for $self";
+	    Carp::croak("Non-TIE class method $func called for $self");
 	}
 	$self = bless ref $_[0] eq 'CODE' ? { FETCH => $_[0] } :
 	    ref $_[0] ? shift : { @_ }, $self;
@@ -118,7 +131,7 @@ sub AUTOLOAD {
 		unless ( "TIE$type" eq $func ) {
 		    require Carp;
 		    $type ||= 'non-reference';
-		    +Carp::croak "BASE cannot be $type in " . __PACKAGE__ . "::$func";
+		    Carp::croak("BASE cannot be $type in " . __PACKAGE__ . "::$func");
 		}
 		require "Tie/\u\L$type.pm";
 		bless $base, "Tie::Std\u\L$type";
@@ -131,7 +144,7 @@ sub AUTOLOAD {
 	my $base = $self->{BASE};
 	return $base->$func(@_) if $base;
 	require Carp;
-	+Carp::croak "No $func handler defined in " . __PACKAGE__ . " object";
+	Carp::croak("No $func handler defined in " . __PACKAGE__ . " object");
     }; 
     goto &$code;
 }
